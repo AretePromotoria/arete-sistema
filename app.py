@@ -1,10 +1,9 @@
 import streamlit as st
 
-# Configuración de la página con los colores y estilo institucional de Areté
+# 1. LA CONFIGURACIÓN DE LA PÁGINA VA PRIMERO OBLIGATORIAMENTE
 st.set_page_config(
     page_title="Sistema Areté - Promotoría",
-    page_icon= # Muestra el logotipo oficial de Areté (cambia 'Arete Promotoria.jpg' por el nombre exacto de tu archivo)
-st.image("Arete Promotoria.jpg", width=250),
+    page_icon="🛡️",
     layout="wide"
 )
 
@@ -33,8 +32,15 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Título Principal
-st.title("🛡️ Areté Promotoría - Sistema de Gestión e Indicadores")
+# 2. AHORA SÍ, MOSTRAMOS EL LOGOTIPO OFICIAL Y TÍTULO
+# (Asegúrate de que tu imagen en GitHub se llame exactamente 'logo_arete.png' 
+# o cambia el texto de abajo por el nombre real que le pusiste al archivo)
+try:
+    st.image("logo_arete.png", width=220)
+except:
+    st.title("🛡️ Areté Promotoría")
+
+st.title("Sistema de Gestión e Indicadores")
 st.markdown("---")
 
 # Menú lateral para navegación
@@ -46,7 +52,6 @@ menu = st.sidebar.selectbox("Navegación", ["Panel Directivo", "Registro de Pól
 if menu == "Panel Directivo":
     st.subheader("📊 Panel de Control Gerencial")
     
-    # Selector de Aseguradora
     aseguradora = st.selectbox("Selecciona la Aseguradora a Monitorear:", ["Afirme", "Ve por Más (Bx+)", "Insignia Life"])
     
     col1, col2, col3 = st.columns(3)
@@ -59,7 +64,7 @@ if menu == "Panel Directivo":
         st.markdown('<div class="metric-card"><h3>Agentes Activos</h3><p><b>0 Registrados</b></p></div>', unsafe_allow_html=True)
         
     st.markdown("---")
-    st.info(f"💡 Visualizando los indicadores comerciales actuales para **{aseguradora}**. Utiliza el menú lateral para registrar nuevas pólizas o revisar los avances.")
+    st.info(f"💡 Visualizando los indicadores comerciales actuales para **{aseguradora}**.")
 
 # ---------------------------------------------------------
 # SECCIÓN 2: REGISTRO DE PÓLIZAS
@@ -81,7 +86,7 @@ elif menu == "Registro de Pólizas":
         submitted = st.form_submit_button("Guardar y Calcular Bonos")
         
         if submitted:
-            st.success(f"¡Póliza {num_poliza} de {aseguradora_poliza} registrada con éxito! El sistema ha actualizado los semáforos de bonos y programado las alertas.")
+            st.success(f"¡Póliza {num_poliza} registrada con éxito!")
 
 # ---------------------------------------------------------
 # SECCIÓN 3: PORTAL DEL AGENTE
