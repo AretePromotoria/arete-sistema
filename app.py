@@ -35,7 +35,7 @@ st.markdown("""
 
 # 2. LOGOTIPO Y TÍTULO
 try:
-    st.image("logo_arete.png", width=220)
+    st.image("Arete Promotoria.jpg", width=220)
 except:
     st.title("🛡️ Areté Promotoría")
 
