@@ -33,10 +33,10 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # 2. AHORA SÍ, MOSTRAMOS EL LOGOTIPO OFICIAL Y TÍTULO
-# (Asegúrate de que tu imagen en GitHub se llame exactamente 'logo_arete.png' 
+# (Asegúrate de que tu imagen en GitHub se llame exactamente 'Arete Promotoria.jpg' 
 # o cambia el texto de abajo por el nombre real que le pusiste al archivo)
 try:
-    st.image("logo_arete.png", width=220)
+    st.image("Arete Promotoria.jpg", width=220)
 except:
     st.title("🛡️ Areté Promotoría")
 
