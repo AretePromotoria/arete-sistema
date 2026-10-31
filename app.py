@@ -3,7 +3,8 @@ import streamlit as st
 # Configuración de la página con los colores y estilo institucional de Areté
 st.set_page_config(
     page_title="Sistema Areté - Promotoría",
-    page_icon="🛡️",
+    page_icon= # Muestra el logotipo oficial de Areté (cambia 'Arete Promotoria.jpg' por el nombre exacto de tu archivo)
+st.image("Arete Promotoria.jpg", width=250),
     layout="wide"
 )
 
