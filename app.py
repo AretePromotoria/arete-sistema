@@ -1,13 +1,14 @@
 import streamlit as st
+from datetime import datetime, timedelta
 
-# 1. LA CONFIGURACIÓN DE LA PÁGINA VA PRIMERO OBLIGATORIAMENTE
+# 1. CONFIGURACIÓN DE LA PÁGINA
 st.set_page_config(
     page_title="Sistema Areté - Promotoría",
     page_icon="🛡️",
     layout="wide"
 )
 
-# Aplicando la paleta corporativa mediante CSS personalizado
+# Aplicando la paleta corporativa mediante CSS personalizado (Azul Marino y Dorado Prestige)
 st.markdown("""
     <style>
     .main {
@@ -32,11 +33,9 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 2. AHORA SÍ, MOSTRAMOS EL LOGOTIPO OFICIAL Y TÍTULO
-# (Asegúrate de que tu imagen en GitHub se llame exactamente 'Arete Promotoria.jpg' 
-# o cambia el texto de abajo por el nombre real que le pusiste al archivo)
+# 2. LOGOTIPO Y TÍTULO
 try:
-    st.image("Arete Promotoria.jpg", width=220)
+    st.image("logo_arete.png", width=220)
 except:
     st.title("🛡️ Areté Promotoría")
 
@@ -52,25 +51,36 @@ menu = st.sidebar.selectbox("Navegación", ["Panel Directivo", "Registro de Pól
 if menu == "Panel Directivo":
     st.subheader("📊 Panel de Control Gerencial")
     
-    aseguradora = st.selectbox("Selecciona la Aseguradora a Monitorear:", ["Afirme", "Ve por Más (Bx+)", "Insignia Life"])
+    # Selector con opción "Areté" para ver el total global y por aseguradora individual
+    vista_seleccionada = st.selectbox(
+        "Selecciona el Filtro de Visualización:", 
+        ["Areté (Total Global)", "Afirme", "Ve por Más (Bx+)", "Insignia Life"]
+    )
     
     col1, col2, col3 = st.columns(3)
     
-    with col1:
-        st.markdown('<div class="metric-card"><h3>Producción Global</h3><p><b>$0.00 MXN</b></p></div>', unsafe_allow_html=True)
-    with col2:
-        st.markdown('<div class="metric-card"><h3>Siniestralidad Autos</h3><p><b>0.0%</b> (Meta < 65%)</p></div>', unsafe_allow_html=True)
-    with col3:
-        st.markdown('<div class="metric-card"><h3>Agentes Activos</h3><p><b>0 Registrados</b></p></div>', unsafe_allow_html=True)
-        
-    st.markdown("---")
-    st.info(f"💡 Visualizando los indicadores comerciales actuales para **{aseguradora}**.")
+    if vista_seleccionada == "Areté (Total Global)":
+        with col1:
+            st.markdown('<div class="metric-card"><h3>Producción Total Areté</h3><p><b>$0.00 MXN</b> (Suma de las 3)</p></div>', unsafe_allow_html=True)
+        with col2:
+            st.markdown('<div class="metric-card"><h3>Siniestralidad Global</h3><p><b>0.0%</b></p></div>', unsafe_allow_html=True)
+        with col3:
+            st.markdown('<div class="metric-card"><h3>Total Agentes Activos</h3><p><b>0 Registrados</b></p></div>', unsafe_allow_html=True)
+        st.info("💡 Estás visualizando el **Consolidado Global de Areté**, sumando la operación de Afirme, Bx+ e Insignia Life.")
+    else:
+        with col1:
+            st.markdown(f'<div class="metric-card"><h3>Producción ({vista_seleccionada})</h3><p><b>$0.00 MXN</b></p></div>', unsafe_allow_html=True)
+        with col2:
+            st.markdown(f'<div class="metric-card"><h3>Siniestralidad Autos</h3><p><b>0.0%</b></p></div>', unsafe_allow_html=True)
+        with col3:
+            st.markdown(f'<div class="metric-card"><h3>Agentes en {vista_seleccionada}</h3><p><b>0 Registrados</b></p></div>', unsafe_allow_html=True)
+        st.info(f"💡 Visualizando los indicadores comerciales específicos para **{vista_seleccionada}**.")
 
 # ---------------------------------------------------------
 # SECCIÓN 2: REGISTRO DE PÓLIZAS
 # ---------------------------------------------------------
 elif menu == "Registro de Pólizas":
-    st.subheader("📂 Alta de Póliza Nueva")
+    st.subheader("📂 Alta de Póliza Nueva y Control de Vigencias")
     
     with st.form("form_poliza"):
         col_a, col_b = st.columns(2)
@@ -78,15 +88,17 @@ elif menu == "Registro de Pólizas":
             num_poliza = st.text_input("Número de Póliza")
             aseguradora_poliza = st.selectbox("Aseguradora", ["Afirme", "Ve por Más (Bx+)", "Insignia Life"])
             ramo = st.selectbox("Ramo", ["Autos", "Daños", "Vida"])
-        with col_b:
             nombre_cliente = st.text_input("Nombre del Asegurado / Cliente")
+        with col_b:
             prima_neta = st.number_input("Prima Neta Pagada (MXN)", min_value=0.0, format="%.2f")
-            fecha_vencimiento = st.date_input("Fecha de Vencimiento")
+            fecha_inicio = st.date_input("Fecha de Inicio de Vigencia", value=datetime.today())
+            fecha_vencimiento = st.date_input("Fecha de Fin de Vigencia", value=datetime.today() + timedelta(days=365))
+            periodicidad = st.selectbox("Periodicidad de Pago", ["Anual", "Semestral", "Trimestral", "Mensual"])
             
-        submitted = st.form_submit_button("Guardar y Calcular Bonos")
+        submitted = st.form_submit_button("Guardar y Calendarizar Alertas")
         
         if submitted:
-            st.success(f"¡Póliza {num_poliza} registrada con éxito!")
+            st.success(f"¡Póliza {num_poliza} registrada con éxito! Periodicidad: **{periodicidad}**. Alertas programadas para Ejecutivo de Cobranza, Agente y Asegurado.")
 
 # ---------------------------------------------------------
 # SECCIÓN 3: PORTAL DEL AGENTE
@@ -94,7 +106,7 @@ elif menu == "Registro de Pólizas":
 elif menu == "Portal del Agente":
     st.subheader("👤 Vista de Agente - Semáforo de Metas")
     
-    st.markdown("### 🎯 Tu Avance Trimestral (Afirme)")
+    st.markdown("### 🎯 Tu Avance Trimestral")
     st.progress(0.15)
     st.write("Prima Acumulada: $150,000 / Meta Banda: $300,000 MXN")
     
