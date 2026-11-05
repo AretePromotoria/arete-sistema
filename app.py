@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 # 1. CONFIGURACIÓN DE LA PÁGINA
 st.set_page_config(
     page_title="Sistema Areté - Promotoría",
-    page_icon="🛡️",
+    page_icon="Arete Promotoria.jpg",
     layout="wide"
 )
 
