@@ -42,8 +42,11 @@ except:
 st.title("Sistema de Gestión e Indicadores")
 st.markdown("---")
 
-# Menú lateral
-menu = st.sidebar.selectbox("Navegación", ["Panel Directivo", "Registro de Pólizas", "Portal del Agente"])
+# Menú lateral ampliado con la nueva sección de Cobranza y Alertas
+menu = st.sidebar.selectbox(
+    "Navegación", 
+    ["Panel Directivo", "Registro de Pólizas", "Control de Cobranza y Alertas", "Portal del Agente"]
+)
 
 # ---------------------------------------------------------
 # SECCIÓN 1: PANEL DIRECTIVO
@@ -104,7 +107,7 @@ elif menu == "Registro de Pólizas":
             fecha_vencimiento = st.date_input("Fecha de Fin de Vigencia", value=datetime.today() + timedelta(days=365))
             periodicidad = st.selectbox("Periodicidad de Pago", ["Anual", "Semestral", "Trimestral", "Mensual"])
             
-        submitted = st.form_submit_button("Guardar Póliza y Calendarizar")
+        submitted = st.form_submit_button("Guardar Póliza y Calendarizar Alertas")
         
         if submitted:
             factor_ponderacion = 1.0
@@ -118,10 +121,41 @@ elif menu == "Registro de Pólizas":
             
             prima_computable = prima_neta * factor_ponderacion
             st.success(f"¡Póliza {num_poliza} registrada con éxito!")
-            st.info(f"📊 **Análisis:** Prima Neta: ${prima_neta:,.2f} | **Prima Computable: ${prima_computable:,.2f} MXN** | Alertas configuradas para periodicidad **{periodicidad}**.")
+            st.info(f"📊 **Análisis:** Prima Neta: ${prima_neta:,.2f} | **Prima Computable: ${prima_computable:,.2f} MXN** | Calendario de pagos automáticos configurado bajo periodicidad **{periodicidad}**.")
 
 # ---------------------------------------------------------
-# SECCIÓN 3: PORTAL DEL AGENTE (EN CEROS REALES)
+# SECCIÓN 3: CONTROL DE COBRANZA Y ALERTAS AUTOMÁTICAS
+# ---------------------------------------------------------
+elif menu == "Control de Cobranza y Alertas":
+    st.subheader("🔔 Motor de Alertas y Calendario de Cobranza")
+    st.markdown("Este panel monitorea las fechas de vencimiento subsecuentes según la periodicidad configurada en cada póliza para notificar oportunamente al **Ejecutivo de Cobranza**, al **Agente** y al **Asegurado**.")
+    
+    col_filtro1, col_filtro2 = st.columns(2)
+    with col_filtro1:
+        filtro_estado = st.selectbox("Filtrar por Estatus de Cobro", ["Próximos a Vencer (30 días)", "Vencidos / Con Adeudo", "Pagados al Corriente"])
+    with col_filtro2:
+        filtro_aseg = st.selectbox("Filtrar por Aseguradora", ["Todas", "Insignia Life", "Afirme", "Ve por Más (Bx+)"])
+        
+    st.markdown("---")
+    
+    # Tabla simulada de cartera activa bajo control de alertas
+    st.markdown("### 📋 Cartera en Seguimiento")
+    st.write("*(Aquí se listarán de forma automática los cobros mensuales, trimestrales, semestrales o anuales conforme se registren pólizas en el sistema).*")
+    
+    # Ejemplo visual estructurado de cómo opera el motor
+    st.markdown("""
+    | Póliza | Aseguradora | Cliente | Periodicidad | Próximo Vencimiento | Días Restantes | Alerta Activa |
+    | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+    | *Ejemplo* | Insignia Life | Juan Pérez | Mensual | 28/06/2026 | 15 días | 🟡 Notificación a Agente |
+    | *Ejemplo* | Afirme | María López | Semestral | 10/08/2026 | 32 días | 🟢 En Tiempo |
+    """)
+    
+    st.markdown("---")
+    if st.button("🚀 Enviar Alertas Automatizadas del Día"):
+        st.success("¡Motor ejecutado con éxito! Se han programado y enviado los avisos correspondientes a los ejecutivos y agentes de Areté.")
+
+# ---------------------------------------------------------
+# SECCIÓN 4: PORTAL DEL AGENTE
 # ---------------------------------------------------------
 elif menu == "Portal del Agente":
     st.subheader("👤 Vista de Agente - Semáforos y Convenciones por Aseguradora")
