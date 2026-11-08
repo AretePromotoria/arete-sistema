@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 # 1. CONFIGURACIÓN DE LA PÁGINA
 st.set_page_config(
     page_title="Sistema Areté - Promotoría",
-    page_icon="Arete Promotoria.jpg",
+    page_icon="🛡️",
     layout="wide"
 )
 
@@ -33,9 +33,9 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 2. LOGOTIPO Y TÍTULO
+# 2. LOGOTIPO OFICIAL Y TÍTULO
 try:
-    st.image("logo_arete.png", width=220)
+    st.image("Arete Promotoria.jpg", width=220)
 except:
     st.title("🛡️ Areté Promotoría")
 
@@ -76,10 +76,10 @@ if menu == "Panel Directivo":
         st.info(f"💡 Visualizando indicadores comerciales para **{vista_seleccionada}**.")
 
 # ---------------------------------------------------------
-# SECCIÓN 2: REGISTRO DE PÓLIZAS CON MOTOR DE CÁLCULO INSIGNIA LIFE
+# SECCIÓN 2: REGISTRO DE PÓLIZAS CON CÁLCULO
 # ---------------------------------------------------------
 elif menu == "Registro de Pólizas":
-    st.subheader("📂 Alta de Póliza y Cálculo de Prima Computable")
+    st.subheader("📂 Alta de Póliza y Control de Vigencias")
     
     with st.form("form_poliza"):
         col_a, col_b = st.columns(2)
@@ -88,14 +88,10 @@ elif menu == "Registro de Pólizas":
             aseguradora_poliza = st.selectbox("Aseguradora", ["Insignia Life", "Afirme", "Ve por Más (Bx+)"])
             nombre_cliente = st.text_input("Nombre del Asegurado / Cliente")
             
-            # Campos específicos según aseguradora
             if aseguradora_poliza == "Insignia Life":
                 producto_insignia = st.selectbox("Producto Insignia Life", [
-                    "Vida 90", 
-                    "Temporales", 
-                    "Vitalicios y VPL", 
-                    "Insignia Life Universal / DotIL", 
-                    "Insignia Life Universal +"
+                    "Vida 90", "Temporales", "Vitalicios y VPL", 
+                    "Insignia Life Universal / DotIL", "Insignia Life Universal +"
                 ])
                 plazo_pago = st.number_input("Plazo de Pago de Primas (Años)", min_value=1, max_value=30, value=10)
             else:
@@ -108,34 +104,91 @@ elif menu == "Registro de Pólizas":
             fecha_vencimiento = st.date_input("Fecha de Fin de Vigencia", value=datetime.today() + timedelta(days=365))
             periodicidad = st.selectbox("Periodicidad de Pago", ["Anual", "Semestral", "Trimestral", "Mensual"])
             
-        submitted = st.form_submit_button("Guardar Póliza y Calcular")
+        submitted = st.form_submit_button("Guardar Póliza y Calendarizar")
         
         if submitted:
-            # Lógica de cálculo de Prima Computable basada en el cuaderno de Insignia Life
             factor_ponderacion = 1.0
             if aseguradora_poliza == "Insignia Life":
                 if producto_insignia == "Vida 90":
-                    factor_ponderacion = 0.20 if plazo_pago <= 4 else 1.0 # Ejemplo normativo del cuaderno
+                    factor_ponderacion = 0.20 if plazo_pago <= 4 else 1.0
                 elif producto_insignia == "Vitalicios y VPL":
                     factor_ponderacion = 0.05 if plazo_pago <= 4 else (0.40 if plazo_pago <= 9 else (0.80 if plazo_pago <= 14 else 1.0))
                 elif "Universal" in producto_insignia:
                     factor_ponderacion = 0.80 if plazo_pago < 15 else 1.0
             
             prima_computable = prima_neta * factor_ponderacion
-            
             st.success(f"¡Póliza {num_poliza} registrada con éxito!")
-            st.info(f"📊 **Análisis Insignia Life:** Prima Neta: ${prima_neta:,.2f} | Factor Aplicado: {int(factor_ponderacion*100)}% | **Prima Computable para Bonos: ${prima_computable:,.2f} MXN**")
+            st.info(f"📊 **Análisis:** Prima Neta: ${prima_neta:,.2f} | **Prima Computable: ${prima_computable:,.2f} MXN** | Alertas configuradas para periodicidad **{periodicidad}**.")
 
 # ---------------------------------------------------------
-# SECCIÓN 3: PORTAL DEL AGENTE
+# SECCIÓN 3: PORTAL DEL AGENTE (SEPARADO POR ASEGURADORA)
 # ---------------------------------------------------------
 elif menu == "Portal del Agente":
-    st.subheader("👤 Vista de Agente - Semáforo de Metas y Bonos")
+    st.subheader("👤 Vista de Agente - Semáforos y Convenciones por Aseguradora")
     
-    st.markdown("### 🎯 Tu Avance Trimestral (Insignia Life / Afirme)")
-    st.progress(0.15)
-    st.write("Prima Computable Acumulada: $150,000 / Meta Banda Requerida: $465,000 MXN")
+    agente_aseguradora = st.selectbox(
+        "Selecciona la Aseguradora para consultar tus Metas y Convenciones:", 
+        ["Insigina Life", "Afirme", "Ve por Más (Bx+)"]
+    )
     
-    st.markdown("### ✈️ Camino a Convención Anual 2027")
-    st.progress(0.40)
-    st.write("Estatus: En trayecto hacia la Convención Top Estelar.")
+    st.markdown("---")
+    
+    if agente_aseguradora == "Insigina Life":
+        st.markdown("### 🏢 Insignia Life — Avance de Metas")
+        col_meta1, col_meta2 = st.columns(2)
+        with col_meta1:
+            st.markdown("**🎯 Bono Trimestral / Anual (Vida Individual)**")
+            st.progress(0.15)
+            st.write("Acumulado: $150,000 / Meta Banda: $465,000 MXN")
+        with col_meta2:
+            st.markdown("**🛡️ Índice de Conservación**")
+            st.progress(0.90)
+            st.write("Estatus Actual: 90.0% (Requerido > 87.5%)")
+            
+        st.markdown("---")
+        st.markdown("### ✈️ Convenciones Insignia Life 2027")
+        col_conv1, col_conv2 = st.columns(2)
+        with col_conv1:
+            st.info("🇲🇽 **Convención Nacional (Top Insignia Life)**\n\n* **Meta:** $1,150,000 MXN\n* **Progreso:** $350,000 MXN (30%)\n* *Estatus: En ruta*")
+        with col_conv2:
+            st.success("🌍 **Convención Internacional / Estelar 2027**\n\n* **Meta:** $2,660,000 MXN\n* **Progreso:** $350,000 MXN (13%)\n* *Estatus: En desarrollo*")
+
+    elif agente_aseguradora == "Afirme":
+        st.markdown("### 🏢 Afirme — Avance de Metas")
+        col_meta1, col_meta2 = st.columns(2)
+        with col_meta1:
+            st.markdown("**🎯 Bono Mensual / Trimestral Autos y Vida**")
+            st.progress(0.45)
+            st.write("Acumulado: $750,000 / Meta Banda: $1,500,000 MXN")
+        with col_meta2:
+            st.markdown("**📉 Siniestralidad de Cartera**")
+            st.progress(0.38)
+            st.write("Estatus Actual: 38% (Meta < 40%)")
+            
+        st.markdown("---")
+        st.markdown("### ✈️ Convenciones Afirme")
+        col_conv1, col_conv2 = st.columns(2)
+        with col_conv1:
+            st.info("🇲🇽 **Convención Nacional Afirme**\n\n* **Progreso:** 50% alcanzado hacia la meta anual.")
+        with col_conv2:
+            st.success("🌍 **Convención Estelar Internacional Afirme**\n\n* **Progreso:** 25% alcanzado hacia el objetivo.")
+
+    else:
+        st.markdown("### 🏢 Ve por Más (Bx+) — Avance de Metas")
+        col_meta1, col_meta2 = st.columns(2)
+        with col_meta1:
+            st.markdown("**🎯 Bono de Producción Bx+**")
+            st.progress(0.20)
+            st.write("Estatus de primas computables vigentes.")
+        with col_meta2:
+            st.markdown("**🛡️ Retención y Conservación**")
+            st.progress(0.85)
+            st.write("Estatus óptimo de cartera.")
+            
+        st.markdown("---")
+        st.markdown("### ✈️ Convenciones Ve por Más (Bx+)")
+        col_conv1, col_conv2 = st.columns(2)
+        with col_conv1:
+            st.info("🇲🇽 **Convención Nacional Bx+**\n\n* Seguimiento de objetivos anuales.")
+        with col_conv2:
+            st.success("🌍 **Convención Internacional Bx+**\n\n* Trayectoria hacia el reconocimiento global.")
