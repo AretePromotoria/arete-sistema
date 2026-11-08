@@ -121,74 +121,74 @@ elif menu == "Registro de Pólizas":
             st.info(f"📊 **Análisis:** Prima Neta: ${prima_neta:,.2f} | **Prima Computable: ${prima_computable:,.2f} MXN** | Alertas configuradas para periodicidad **{periodicidad}**.")
 
 # ---------------------------------------------------------
-# SECCIÓN 3: PORTAL DEL AGENTE (SEPARADO POR ASEGURADORA)
+# SECCIÓN 3: PORTAL DEL AGENTE (EN CEROS REALES)
 # ---------------------------------------------------------
 elif menu == "Portal del Agente":
     st.subheader("👤 Vista de Agente - Semáforos y Convenciones por Aseguradora")
     
     agente_aseguradora = st.selectbox(
         "Selecciona la Aseguradora para consultar tus Metas y Convenciones:", 
-        ["Insigina Life", "Afirme", "Ve por Más (Bx+)"]
+        ["Insignia Life", "Afirme", "Ve por Más (Bx+)"]
     )
     
     st.markdown("---")
     
-    if agente_aseguradora == "Insigina Life":
+    if agente_aseguradora == "Insignia Life":
         st.markdown("### 🏢 Insignia Life — Avance de Metas")
         col_meta1, col_meta2 = st.columns(2)
         with col_meta1:
             st.markdown("**🎯 Bono Trimestral / Anual (Vida Individual)**")
-            st.progress(0.15)
-            st.write("Acumulado: $150,000 / Meta Banda: $465,000 MXN")
+            st.progress(0.0)
+            st.write("Acumulado: $0.00 / Meta Banda: $465,000 MXN")
         with col_meta2:
             st.markdown("**🛡️ Índice de Conservación**")
-            st.progress(0.90)
-            st.write("Estatus Actual: 90.0% (Requerido > 87.5%)")
+            st.progress(0.0)
+            st.write("Estatus Actual: 0.0% (Requerido > 87.5%)")
             
         st.markdown("---")
         st.markdown("### ✈️ Convenciones Insignia Life 2027")
         col_conv1, col_conv2 = st.columns(2)
         with col_conv1:
-            st.info("🇲🇽 **Convención Nacional (Top Insignia Life)**\n\n* **Meta:** $1,150,000 MXN\n* **Progreso:** $350,000 MXN (30%)\n* *Estatus: En ruta*")
+            st.info("🇲🇽 **Convención Nacional (Top Insignia Life)**\n\n* **Meta:** $1,150,000 MXN\n* **Progreso:** $0.00 MXN (0%)\n* *Estatus: Sin avance registrado*")
         with col_conv2:
-            st.success("🌍 **Convención Internacional / Estelar 2027**\n\n* **Meta:** $2,660,000 MXN\n* **Progreso:** $350,000 MXN (13%)\n* *Estatus: En desarrollo*")
+            st.success("🌍 **Convención Internacional / Estelar 2027**\n\n* **Meta:** $2,660,000 MXN\n* **Progreso:** $0.00 MXN (0%)\n* *Estatus: Sin avance registrado*")
 
     elif agente_aseguradora == "Afirme":
         st.markdown("### 🏢 Afirme — Avance de Metas")
         col_meta1, col_meta2 = st.columns(2)
         with col_meta1:
             st.markdown("**🎯 Bono Mensual / Trimestral Autos y Vida**")
-            st.progress(0.45)
-            st.write("Acumulado: $750,000 / Meta Banda: $1,500,000 MXN")
+            st.progress(0.0)
+            st.write("Acumulado: $0.00 / Meta Banda: Por definir")
         with col_meta2:
             st.markdown("**📉 Siniestralidad de Cartera**")
-            st.progress(0.38)
-            st.write("Estatus Actual: 38% (Meta < 40%)")
+            st.progress(0.0)
+            st.write("Estatus Actual: 0.0% (Meta < 40%)")
             
         st.markdown("---")
         st.markdown("### ✈️ Convenciones Afirme")
         col_conv1, col_conv2 = st.columns(2)
         with col_conv1:
-            st.info("🇲🇽 **Convención Nacional Afirme**\n\n* **Progreso:** 50% alcanzado hacia la meta anual.")
+            st.info("🇲🇽 **Convención Nacional Afirme**\n\n* **Progreso:** 0% alcanzado.")
         with col_conv2:
-            st.success("🌍 **Convención Estelar Internacional Afirme**\n\n* **Progreso:** 25% alcanzado hacia el objetivo.")
+            st.success("🌍 **Convención Estelar Internacional Afirme**\n\n* **Progreso:** 0% alcanzado.")
 
     else:
         st.markdown("### 🏢 Ve por Más (Bx+) — Avance de Metas")
         col_meta1, col_meta2 = st.columns(2)
         with col_meta1:
             st.markdown("**🎯 Bono de Producción Bx+**")
-            st.progress(0.20)
-            st.write("Estatus de primas computables vigentes.")
+            st.progress(0.0)
+            st.write("Acumulado: $0.00 MXN")
         with col_meta2:
             st.markdown("**🛡️ Retención y Conservación**")
-            st.progress(0.85)
-            st.write("Estatus óptimo de cartera.")
+            st.progress(0.0)
+            st.write("Estatus actual: 0.0%")
             
         st.markdown("---")
         st.markdown("### ✈️ Convenciones Ve por Más (Bx+)")
         col_conv1, col_conv2 = st.columns(2)
         with col_conv1:
-            st.info("🇲🇽 **Convención Nacional Bx+**\n\n* Seguimiento de objetivos anuales.")
+            st.info("🇲🇽 **Convención Nacional Bx+**\n\n* Sin pólizas registradas.")
         with col_conv2:
-            st.success("🌍 **Convención Internacional Bx+**\n\n* Trayectoria hacia el reconocimiento global.")
+            st.success("🌍 **Convención Internacional Bx+**\n\n* Sin pólizas registradas.")
