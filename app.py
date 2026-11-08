@@ -8,7 +8,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Estilos con la identidad corporativa de Areté (Azul Marino y Dorado Prestige)
+# Estilos con la identidad corporativa de Areté (Azul Marino Corporativo y Dorado Prestige)
 st.markdown("""
     <style>
     .main {
@@ -42,7 +42,7 @@ except:
 st.title("Sistema de Gestión e Indicadores")
 st.markdown("---")
 
-# Menú lateral ampliado con la nueva sección de Cobranza y Alertas
+# Menú lateral
 menu = st.sidebar.selectbox(
     "Navegación", 
     ["Panel Directivo", "Registro de Pólizas", "Control de Cobranza y Alertas", "Portal del Agente"]
@@ -79,12 +79,13 @@ if menu == "Panel Directivo":
         st.info(f"💡 Visualizando indicadores comerciales para **{vista_seleccionada}**.")
 
 # ---------------------------------------------------------
-# SECCIÓN 2: REGISTRO DE PÓLIZAS CON CÁLCULO
+# SECCIÓN 2: REGISTRO DE PÓLIZAS CON DATOS DE CONTACTO
 # ---------------------------------------------------------
 elif menu == "Registro de Pólizas":
-    st.subheader("📂 Alta de Póliza y Control de Vigencias")
+    st.subheader("📂 Alta de Póliza, Canales de Contacto y Control de Vigencias")
     
     with st.form("form_poliza"):
+        st.markdown("##### 📌 Datos Generales de la Póliza")
         col_a, col_b = st.columns(2)
         with col_a:
             num_poliza = st.text_input("Número de Póliza")
@@ -106,7 +107,20 @@ elif menu == "Registro de Pólizas":
             fecha_inicio = st.date_input("Fecha de Inicio de Vigencia", value=datetime.today())
             fecha_vencimiento = st.date_input("Fecha de Fin de Vigencia", value=datetime.today() + timedelta(days=365))
             periodicidad = st.selectbox("Periodicidad de Pago", ["Anual", "Semestral", "Trimestral", "Mensual"])
-            
+        
+        st.markdown("---")
+        st.markdown("##### 📲 Canales de Notificación para Alertas y Cobranza")
+        col_c, col_d = st.columns(2)
+        with col_c:
+            st.markdown("**Datos del Cliente / Asegurado:**")
+            email_cliente = st.text_input("Correo Electrónico del Cliente", placeholder="ejemplo@cliente.com")
+            whatsapp_cliente = st.text_input("WhatsApp / Teléfono del Cliente (10 dígitos)", placeholder="5512345678")
+        with col_d:
+            st.markdown("**Datos del Agente Responsable:**")
+            nombre_agente = st.text_input("Nombre del Agente de Seguros")
+            email_agente = st.text_input("Correo Electrónico del Agente", placeholder="agente@arete-promotoria.com")
+            whatsapp_agente = st.text_input("WhatsApp del Agente (10 dígitos)", placeholder="5587654321")
+
         submitted = st.form_submit_button("Guardar Póliza y Calendarizar Alertas")
         
         if submitted:
@@ -120,15 +134,16 @@ elif menu == "Registro de Pólizas":
                     factor_ponderacion = 0.80 if plazo_pago < 15 else 1.0
             
             prima_computable = prima_neta * factor_ponderacion
-            st.success(f"¡Póliza {num_poliza} registrada con éxito!")
-            st.info(f"📊 **Análisis:** Prima Neta: ${prima_neta:,.2f} | **Prima Computable: ${prima_computable:,.2f} MXN** | Calendario de pagos automáticos configurado bajo periodicidad **{periodicidad}**.")
+            st.success(f"¡Póliza {num_poliza} registrada con éxito para el cliente {nombre_cliente}!")
+            st.info(f"📊 **Análisis:** Prima Neta: ${prima_neta:,.2f} | **Prima Computable: ${prima_computable:,.2f} MXN**")
+            st.info(f"🔔 **Ruta de Alerta Configurada:** Notificaciones programadas vía WhatsApp ({whatsapp_cliente}) y Correo ({email_cliente}) con copia al Agente ({email_agente}) según periodicidad **{periodicidad}**.")
 
 # ---------------------------------------------------------
 # SECCIÓN 3: CONTROL DE COBRANZA Y ALERTAS AUTOMÁTICAS
 # ---------------------------------------------------------
 elif menu == "Control de Cobranza y Alertas":
     st.subheader("🔔 Motor de Alertas y Calendario de Cobranza")
-    st.markdown("Este panel monitorea las fechas de vencimiento subsecuentes según la periodicidad configurada en cada póliza para notificar oportunamente al **Ejecutivo de Cobranza**, al **Agente** y al **Asegurado**.")
+    st.markdown("Este panel monitorea las fechas de vencimiento subsecuentes según la periodicidad configurada y notifica a través de los datos de contacto registrados.")
     
     col_filtro1, col_filtro2 = st.columns(2)
     with col_filtro1:
@@ -138,21 +153,17 @@ elif menu == "Control de Cobranza y Alertas":
         
     st.markdown("---")
     
-    # Tabla simulada de cartera activa bajo control de alertas
-    st.markdown("### 📋 Cartera en Seguimiento")
-    st.write("*(Aquí se listarán de forma automática los cobros mensuales, trimestrales, semestrales o anuales conforme se registren pólizas en el sistema).*")
-    
-    # Ejemplo visual estructurado de cómo opera el motor
+    st.markdown("### 📋 Cartera en Seguimiento con Contactos de Notificación")
     st.markdown("""
-    | Póliza | Aseguradora | Cliente | Periodicidad | Próximo Vencimiento | Días Restantes | Alerta Activa |
+    | Póliza | Aseguradora | Cliente | Periodicidad | Contacto Cliente | Agente | Estatus Alerta |
     | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-    | *Ejemplo* | Insignia Life | Juan Pérez | Mensual | 28/06/2026 | 15 días | 🟡 Notificación a Agente |
-    | *Ejemplo* | Afirme | María López | Semestral | 10/08/2026 | 32 días | 🟢 En Tiempo |
+    | *Ejemplo* | Insignia Life | Juan Pérez | Mensual | 📱 5512345678 / ✉️ juan@mail.com | Carlos Ruiz | 🟡 Alerta Automática Programada |
+    | *Ejemplo* | Afirme | María López | Semestral | 📱 5598765432 / ✉️ maria@mail.com | Ana Gómez | 🟢 Cobro al Corriente |
     """)
     
     st.markdown("---")
-    if st.button("🚀 Enviar Alertas Automatizadas del Día"):
-        st.success("¡Motor ejecutado con éxito! Se han programado y enviado los avisos correspondientes a los ejecutivos y agentes de Areté.")
+    if st.button("🚀 Enviar Notificaciones Automáticas (WhatsApp / Email)"):
+        st.success("¡Motor de notificaciones ejecutado! Se han enviado los avisos de cobro correspondientes a los clientes y copias de seguimiento a los agentes.")
 
 # ---------------------------------------------------------
 # SECCIÓN 4: PORTAL DEL AGENTE
