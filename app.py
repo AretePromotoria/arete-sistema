@@ -98,6 +98,12 @@ elif menu == "Registro de Pólizas":
                     "Insignia Life Universal / DotIL", "Insignia Life Universal +"
                 ])
                 plazo_pago = st.number_input("Plazo de Pago de Primas (Años)", min_value=1, max_value=30, value=10)
+            elif aseguradora_poliza == "Ve por Más (Bx+)":
+                producto_bx = st.selectbox("Ramo Ve por Más", [
+                    "Vida Individual", "GMM Individual", "Accidentes Personales", 
+                    "Automóviles Residentes", "Daños", "Vida Grupo / GMM Colectivo"
+                ])
+                plazo_pago = 1.0
             else:
                 producto_insignia = "N/A"
                 plazo_pago = 1.0
@@ -158,7 +164,7 @@ elif menu == "Control de Cobranza y Alertas":
     | Póliza | Aseguradora | Cliente | Periodicidad | Contacto Cliente | Agente | Estatus Alerta |
     | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
     | *Ejemplo* | Insignia Life | Juan Pérez | Mensual | 📱 5512345678 / ✉️ juan@mail.com | Carlos Ruiz | 🟡 Alerta Automática Programada |
-    | *Ejemplo* | Afirme | María López | Semestral | 📱 5598765432 / ✉️ maria@mail.com | Ana Gómez | 🟢 Cobro al Corriente |
+    | *Ejemplo* | Ve por Más | Sofía Morales | Anual | 📱 5544332211 / ✉️ sofia@mail.com | Luis Torres | 🟢 Cobro al Corriente |
     """)
     
     st.markdown("---")
@@ -166,7 +172,7 @@ elif menu == "Control de Cobranza y Alertas":
         st.success("¡Motor de notificaciones ejecutado! Se han enviado los avisos de cobro correspondientes a los clientes y copias de seguimiento a los agentes.")
 
 # ---------------------------------------------------------
-# SECCIÓN 4: PORTAL DEL AGENTE
+# SECCIÓN 4: PORTAL DEL AGENTE (ACTUALIZADO CON Bx+)
 # ---------------------------------------------------------
 elif menu == "Portal del Agente":
     st.subheader("👤 Vista de Agente - Semáforos y Convenciones por Aseguradora")
@@ -219,21 +225,23 @@ elif menu == "Portal del Agente":
             st.success("🌍 **Convención Estelar Internacional Afirme**\n\n* **Progreso:** 0% alcanzado.")
 
     else:
-        st.markdown("### 🏢 Ve por Más (Bx+) — Avance de Metas")
+        st.markdown("### 🏢 Ve por Más (Bx+) — Avance de Metas y Bonos 2026")
         col_meta1, col_meta2 = st.columns(2)
         with col_meta1:
-            st.markdown("**🎯 Bono de Producción Bx+**")
+            st.markdown("**🎯 Bono de Producción Trimestral Bx+**")
             st.progress(0.0)
-            st.write("Acumulado: $0.00 MXN")
+            st.write("Acumulado: $0.00 / Requisito Mínimo Anual: $300,000 MXN")
         with col_meta2:
-            st.markdown("**🛡️ Retención y Conservación**")
+            st.markdown("**🛡️ Control de Siniestralidad y Calidad**")
             st.progress(0.0)
-            st.write("Estatus actual: 0.0%")
+            st.write("Siniestralidad Cartera: 0.0% (Máx. permitido por ramo: 60%)")
             
         st.markdown("---")
-        st.markdown("### ✈️ Convenciones Ve por Más (Bx+)")
-        col_conv1, col_conv2 = st.columns(2)
+        st.markdown("### ✈️ Convenciones Ve por Más 2027 (Destinos Oficiales)")
+        col_conv1, col_conv2, col_conv3 = st.columns(3)
         with col_conv1:
-            st.info("🇲🇽 **Convención Nacional Bx+**\n\n* Sin pólizas registradas.")
+            st.info("🇨🇦 **Convención Cobalto — Vancouver**\n\n* **Requisito:** Desde $3M a $4M según ramo[cite: 78].\n* **Crecimiento:** 15% vs año anterior[cite: 78].\n* **Progreso:** 0%")
         with col_conv2:
-            st.success("🌍 **Convención Internacional Bx+**\n\n* Sin pólizas registradas.")
+            st.warning("🇭🇺 **Convención Neón — Budapest**\n\n* **Requisito:** Desde $6M a $10M según ramo[cite: 81].\n* **Conservación Vida:** 88%[cite: 81].\n* **Progreso:** 0%")
+        with col_conv3:
+            st.success("🇨🇿 **Convención Litio — Praga**\n\n* **Requisito:** Ganar Convención Neón + 100% negocio nuevo[cite: 84].\n* **Progreso:** 0%")
