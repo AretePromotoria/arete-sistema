@@ -145,7 +145,7 @@ elif menu == "Registro de Pólizas":
             st.info(f"🔔 **Ruta de Alerta Configurada:** Notificaciones programadas vía WhatsApp ({whatsapp_cliente}) y Correo ({email_cliente}) con copia al Agente ({email_agente}) según periodicidad **{periodicidad}**.")
 
 # ---------------------------------------------------------
-# SECCIÓN 3: CONTROL DE COBRANZA Y ALERTAS AUTOMÁTICAS
+# SECCIÓN 3: CONTROL DE COBRANZA Y ALERTAS AUTOMÁTICAS (EN CEROS)
 # ---------------------------------------------------------
 elif menu == "Control de Cobranza y Alertas":
     st.subheader("🔔 Motor de Alertas y Calendario de Cobranza")
@@ -160,19 +160,10 @@ elif menu == "Control de Cobranza y Alertas":
     st.markdown("---")
     
     st.markdown("### 📋 Cartera en Seguimiento con Contactos de Notificación")
-    st.markdown("""
-    | Póliza | Aseguradora | Cliente | Periodicidad | Contacto Cliente | Agente | Estatus Alerta |
-    | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-    | *Ejemplo* | Insignia Life | Juan Pérez | Mensual | 📱 5512345678 / ✉️ juan@mail.com | Carlos Ruiz | 🟡 Alerta Automática Programada |
-    | *Ejemplo* | Ve por Más | Sofía Morales | Anual | 📱 5544332211 / ✉️ sofia@mail.com | Luis Torres | 🟢 Cobro al Corriente |
-    """)
-    
-    st.markdown("---")
-    if st.button("🚀 Enviar Notificaciones Automáticas (WhatsApp / Email)"):
-        st.success("¡Motor de notificaciones ejecutado! Se han enviado los avisos de cobro correspondientes a los clientes y copias de seguimiento a los agentes.")
+    st.info("📭 **No hay pólizas registradas en este momento.** Las alertas de cobranza aparecerán automáticamente aquí conforme des de alta pólizas en la sección de 'Registro de Pólizas'.")
 
 # ---------------------------------------------------------
-# SECCIÓN 4: PORTAL DEL AGENTE (ACTUALIZADO CON Bx+)
+# SECCIÓN 4: PORTAL DEL AGENTE
 # ---------------------------------------------------------
 elif menu == "Portal del Agente":
     st.subheader("👤 Vista de Agente - Semáforos y Convenciones por Aseguradora")
